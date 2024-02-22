@@ -11,21 +11,15 @@
     <StackPanel>
         <Button x:Name="btn1" Width="100" Height="50" Click="btn1_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Add resistor"></Button>
         <Button Content="undo line" x:Name="btn2" Width="100" Height="50" Click="btn2_Click" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-        <Button Content="undo rectangle" x:Name="btn3" Width="100" Height="50" Click="btn3_Click" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
         <Button Content="Reset" x:Name="btn4" Width="100" Height="50" Click="btn4_Click" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
         <Button Content="Build" x:Name="btn5" Width="100" Height="50" Click="btn5_Click" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-        <Button Content="add node" x:Name="btn6" Width="100" Height="50" Click="btn6_Click" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+ 
         
       
             <Canvas   DragOver="canvas1_DragOver" x:Name="canvas1" Drop="Canvas_Drop" AllowDrop="True" Width="150" Height="100"  HorizontalAlignment="right" >
                 <Line X1="20" Y1="20" X2="100" Y2="100" ></Line>
             </Canvas>
-        <Rectangle Height="100" Stroke="Black" Width="131">
-            <Rectangle.Fill >
-                <ImageBrush ImageSource="vsource.png">
-                </ImageBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+  
 
     </StackPanel>   
 

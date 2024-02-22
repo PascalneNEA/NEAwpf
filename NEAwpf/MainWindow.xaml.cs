@@ -119,7 +119,7 @@ namespace NEAwpf
             myBitmapImage.BeginInit();
             if(type == 0)
             {  
-                myBitmapImage.UriSource = new Uri(@"C:\Users\S2202037\OneDrive - Notre Dame Catholic Sixth Form College\Computer science year 2\NEA\NEAwpf\NEAwpf\Vsource.png");
+                myBitmapImage.UriSource = new Uri(@"C:\Users\pasca\OneDrive - Notre Dame Catholic Sixth Form College\Computer science year 2\NEA\NEAwpf\NEAwpf\Vsource.png");
                 draggableRectangle.Width = 150;
                 draggableRectangle.Height = 50;
                  nodelist.Add(new Node(false)); //srcnode
@@ -131,7 +131,7 @@ namespace NEAwpf
             {
                 draggableRectangle.Width = 150;
                 draggableRectangle.Height = 100;
-                myBitmapImage.UriSource = new Uri(@"C:\Users\S2202037\OneDrive - Notre Dame Catholic Sixth Form College\Computer science year 2\NEA\NEAwpf\NEAwpf\bin\Debug\net6.0-windows\Images\Symbol-of-Resistor.jpg"); 
+                myBitmapImage.UriSource = new Uri(@"C:\Users\pasca\OneDrive - Notre Dame Catholic Sixth Form College\Computer science year 2\NEA\NEAwpf\NEAwpf\bin\Debug\net6.0-windows\Images\Symbol-of-Resistor.jpg"); 
               
                
             }
@@ -224,11 +224,7 @@ namespace NEAwpf
                     xoffset = 50;
                     yoffset = 100;
                 }
-                else if (compProps[elmnts.IndexOf(draggedElementR)].type == 2)
-                {
-                    xoffset = 10;
-                    yoffset = 20;
-                }
+            
 
 
                     if (e.GetPosition(canvas1).X >= Canvas.GetLeft(draggedElementR) + xoffset && e.GetPosition(canvas1).X <= Canvas.GetLeft(draggedElementR) + yoffset)
@@ -359,17 +355,49 @@ namespace NEAwpf
                     if (compProps[elmnts.IndexOf(L.r1)].type == 0)
                     {
                         P1.X += 100;
+                        P1.Y -= 25;
+                       
                     }
                     else
                     {
                         P1.X += 150;
                     }
-                  // Trace.WriteLine("Rendered right1");
+             
+                    // Trace.WriteLine("Rendered right1");
+                }
+                else
+                {
+
+                    if (compProps[elmnts.IndexOf(L.r1)].type == 0)
+                    {
+                       
+                        P1.Y -= 25;
+                        P1.X += 30;
+                    }
                 }
                 if (L.r2_isLeft == false)
                 {
-                    P2.X += 150;
+                    if (compProps[elmnts.IndexOf(L.r2)].type == 0)
+                    {
+                       
+                        P2.Y -= 25;
+                        P2.X += 150;
+                    }
+                    else
+                    {
+                        P2.X += 150;
+                    }
+                 
                    //Trace.WriteLine("rendered left1");
+                }
+                else
+                {
+                    if (compProps[elmnts.IndexOf(L.r2)].type == 0)
+                    {
+
+                        P2.Y -= 25;
+                        P2.X += 30;
+                    }
                 }
 
                 DrawWire(P1,P2);
@@ -582,104 +610,72 @@ namespace NEAwpf
             temp = null;
         }
         public int count;
-        List<UIElement> searchList = new List<UIElement>();
-        List<UIElement> foundlist = new List<UIElement>();
-        List<bool> foundlistpol = new List<bool>();
-        public List<UIElement> SearchNodes(componentProperty C, bool pol) // Creates a list (unused) takes in the component and the polarity to check 
+        public List<List<UIElement>> nodelistslist = new List<List<UIElement>> ();
+        public List<List<bool>> polListsList = new List<List<bool>> ();
+        public List<UIElement> checklists(UIElement R, bool Rpol)//checks if input is in  a list already if so returns that list
         {
-            bool finished = true;
-            //  List<UIElement> connections = new List<UIElement>();
-            if (searchList.Contains(elmnts[compProps.IndexOf(C)]) ||  (foundlist.Contains(elmnts[compProps.IndexOf(C)]) && (foundlistpol[foundlist.IndexOf(elmnts[compProps.IndexOf(C)])] == pol))) { }
-            else// checks if it is already in the lists 
+         foreach(List<UIElement> List in nodelistslist) 
             {
-                searchList.Add(elmnts[compProps.IndexOf(C)]);// if not add
-                
-            }
-            if (pol == true)// if checking the positive side (C2)
-            {
-                foreach (UIElement F in C.C2) // check through all the components on the + (right) side
+                foreach (UIElement U in List)
                 {
-                    if (foundlist.Contains(F) && (foundlistpol[foundlist.IndexOf(F)] == C.C2polarity[C.C2.IndexOf(F)] )) // if it is already in there return null
+                    if (R == U && polListsList[nodelistslist.IndexOf(List)][List.IndexOf(U)] == Rpol )//if it does match one found in a list
                     {
-                        return null;
+                        return List;//return the current list 
                     }
 
-                    if (searchList.Contains(F)) { } // checks if the searchlist contains it (does not need to check for polarity as a component cant be connected to itself) 
-                    else
-                    {
-                        searchList.Add(F);//( if conditions are met adds it to the lists) 
-                        foundlist.Add(F);
-                        //foundlistpol.Add(compProps[elmnts.IndexOf(F)].C2polarity[]);  // I dont think this is correct it could be false  ( just need to use C.C2polarity) 
-                        foundlistpol.Add(C.C2polarity[C.C2.IndexOf(F)]);
-                        Trace.WriteLine((C.C2polarity[C.C2.IndexOf(F)]));
-                        finished = false;
-                    }
-                }
-                if (finished == false)
-                {
-                    foreach (UIElement E in C.C2)
-                    {                           
-                            SearchNodes(compProps[elmnts.IndexOf(E)], C.C2polarity[C.C2.IndexOf(E)]);    // repeates the procces for every component in the second list ( recursive) 
-                    }
                 }
             }
-
-            else// if checking the negative side (C1) (repeated code ~/)
-            {
-                foreach (UIElement F in C.C1)
-                {
-                    if (foundlist.Contains(F) && (foundlistpol[foundlist.IndexOf(F)] == C.C1polarity[C.C1.IndexOf(F)]))
-                    {
-                        return null;
-                    }
-
-                    if (searchList.Contains(F)) { }
-                    else
-                    {
-                        searchList.Add(F);
-                        foundlist.Add(F);
-                        foundlistpol.Add(C.C1polarity[C.C1.IndexOf(F)]);
-                        Trace.WriteLine((C.C1polarity[C.C1.IndexOf(F)]));
-                        finished = false;
-                    }
-                }
-                if (finished == false)
-                {
-                    foreach (UIElement E in C.C1)
-                    {             
-                            SearchNodes(compProps[elmnts.IndexOf(E)], C.C2polarity[C.C1.IndexOf(E)]);
-                    }
-                }
-            }
-            return searchList;
+            return null;// if it is never found return nothing
         }
            
             
 
-        
+       
         private void btn5_Click(object sender, RoutedEventArgs e)
         {
-         
-            foreach(componentProperty C in compProps)// loops through every component
-            {
-                SearchNodes(C, false);//performs the branch search returns nothing (false becuase it is checking the branch on the negative side)
-            //    nodelist.Add(new Node(false));
-              //  nodelist[nodelist.Count() - 1].Nodecomps = searchList;
-           //     foundlist.AddRange(searchList);
-                
-                searchList.Clear();
-                SearchNodes(C, true);// performs branch search ( positive side)
-               // nodelist.Add(new Node(false));
-             //   nodelist[nodelist.Count() - 1].Nodecomps = searchList;
-           //     foundlist.AddRange(searchList);
-                searchList.Clear();
-            }
-            int c = 0;
-   
             
-           
+            nodelistslist.Add(compProps[0].C1);
+            polListsList.Add(compProps[0].C1polarity);//set up first lists
+            nodelistslist[0].Add(elmnts[0]);
+            polListsList[0].Add(false);
+            foreach (componentProperty C in compProps)//loop through every component 
+            {
+                List<UIElement> tempList = new List<UIElement>();// make a temporary list to check for repeats
+
+                tempList = checklists(elmnts[0], false);
+             
+                if (checklists(elmnts[compProps.IndexOf(C)], false) != null)// check current component negative side
+                {
+                    tempList = checklists(elmnts[compProps.IndexOf(C)], false); // if it is in  a list already make that the temp list
+                    Trace.WriteLine("happen");
+                }
+              
+                int l = C.C1.Count() - 1;
+                for(int i = 0; i< l; i++)//loop through all related components on the negative side
+                {
+                    UIElement U = C.C1[i];
+                    if (checklists(U, C.C1polarity[C.C1.IndexOf(U)]) != null && checklists(U, C.C1polarity[C.C1.IndexOf(U)]) != tempList)//check if there is a item from a different list
+                    {
+                        checklists(U, C.C1polarity[C.C1.IndexOf(U)]).AddRange(tempList);//if so combine the lists
+                        nodelistslist.Remove(tempList);
+                    }
+                }
+                if(tempList.Count == 0)
+                {
+                    nodelistslist.Add(C.C1);
+                    polListsList.Add(C.C1polarity);
+                    nodelistslist[nodelistslist.Count - 1].Add(elmnts[compProps.IndexOf(C)]);
+                    polListsList[polListsList.Count - 1].Add(false);
+                }
+            }
+    
+                Trace.WriteLine("check");
 
             
+
+
+
+
         }
 
         private void btn6_Click(object sender, RoutedEventArgs e)
