@@ -642,7 +642,7 @@ namespace NEAwpf
             {
                 List<UIElement> tempList = new List<UIElement>();// make a temporary list to check for repeats
 
-                tempList = checklists(elmnts[0], false);
+               
              
                 if (checklists(elmnts[compProps.IndexOf(C)], false) != null)// check current component negative side
                 {
